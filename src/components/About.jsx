@@ -3,22 +3,10 @@ export default function About() {
     <section className="statement-page">
       <div className="statement-index">艺术家声明 / 01</div>
       <article className="statement">
-        <h2>My way of looking begins after the event has already passed.</h2>
-        <p>
-          I photograph the city as a place that refuses to explain itself. A face leaves the
-          frame, a window catches a weak light, a street corner keeps the trace of someone who
-          has already gone. I am interested in that delay.
-        </p>
-        <p>
-          I do not photograph to make the world cleaner. I photograph because noise, blur and
-          poor timing sometimes feel more honest than description. The image is a fragment, not
-          proof. It holds pressure, distance, weather, and the small violence of passing time.
-        </p>
-        <p>
-          Cities teach me how people disappear inside space. I watch the gap between bodies and
-          buildings, between memory and the present, between what the camera catches and what it
-          fails to keep. That failure is the work.
-        </p>
+        <h2>我的观看，常常开始于事情已经过去以后。</h2>
+        <p>我把城市看作一个拒绝解释自己的地方。一张脸离开画面，一扇窗接住微弱的光，街角保留着某个已经离开的人的痕迹。我关心的是这种延迟。</p>
+        <p>我并不为了让世界显得更整洁而拍摄。噪点、失焦和错误的时机，有时比清楚的描述更诚实。图像只是片段，不是证明。</p>
+        <p>城市让我看见人如何消失在空间里。我观察身体与建筑、记忆与此刻、相机得到与失去的东西之间的缝隙。那种失败，就是作品的一部分。</p>
       </article>
     </section>
   );

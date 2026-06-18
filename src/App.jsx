@@ -1,14 +1,16 @@
-import { useEffect, useMemo, useState } from 'react';
-import { categories, photos } from './data/photos.js';
+import { useCallback, useEffect, useMemo, useState } from 'react';
+import { photos, projects } from './data/photos.js';
 import Header from './components/Header.jsx';
 import Hero from './components/Hero.jsx';
 import Gallery from './components/Gallery.jsx';
+import Projects from './components/Projects.jsx';
+import Notes from './components/Notes.jsx';
 import About from './components/About.jsx';
 import Contact from './components/Contact.jsx';
 import Lightbox from './components/Lightbox.jsx';
 import FilmNoise from './components/FilmNoise.jsx';
 
-const pageOrder = ['home', 'work', 'about', 'contact'];
+const pageOrder = ['home', 'archive', 'projects', 'notes', 'about', 'contact'];
 
 function readHash() {
   const clean = window.location.hash.replace('#', '');
@@ -16,8 +18,7 @@ function readHash() {
 }
 
 export default function App() {
-  const [page, setPage] = useState(() => readHash());
-  const [activeCategory, setActiveCategory] = useState('All');
+  const [page, setPage] = useState(readHash);
   const [activePhotoId, setActivePhotoId] = useState(null);
 
   useEffect(() => {
@@ -36,33 +37,42 @@ export default function App() {
     [activePhotoId],
   );
 
-  const openPhoto = (photo) => setActivePhotoId(photo.id);
-  const closePhoto = () => setActivePhotoId(null);
-  const showNext = () => setActivePhotoId(photos[(activeIndex + 1) % photos.length].id);
-  const showPrevious = () =>
-    setActivePhotoId(photos[(activeIndex - 1 + photos.length) % photos.length].id);
+  const openPhoto = useCallback((photo) => setActivePhotoId(photo.id), []);
+  const closePhoto = useCallback(() => setActivePhotoId(null), []);
+  const showNext = useCallback(() => {
+    setActivePhotoId((currentId) => {
+      const index = photos.findIndex((photo) => photo.id === currentId);
+      return photos[(index + 1) % photos.length].id;
+    });
+  }, []);
+  const showPrevious = useCallback(() => {
+    setActivePhotoId((currentId) => {
+      const index = photos.findIndex((photo) => photo.id === currentId);
+      return photos[(index - 1 + photos.length) % photos.length].id;
+    });
+  }, []);
+  const openRandom = useCallback(() => {
+    const candidates = photos.filter((photo) => photo.id !== activePhotoId);
+    openPhoto(candidates[Math.floor(Math.random() * candidates.length)] || photos[0]);
+  }, [activePhotoId, openPhoto]);
 
   const activePhoto = activeIndex >= 0 ? photos[activeIndex] : null;
 
   return (
     <>
-      <Header page={page} />
+      <Header page={page} onRandom={openRandom} />
       <main>
         {page === 'home' && <Hero photos={photos.slice(0, 6)} onOpen={openPhoto} />}
-        {page === 'work' && (
-          <Gallery
-            photos={photos}
-            categories={categories}
-            activeCategory={activeCategory}
-            onCategoryChange={setActiveCategory}
-            onOpen={openPhoto}
-          />
-        )}
+        {page === 'archive' && <Gallery photos={photos} onOpen={openPhoto} />}
+        {page === 'projects' && <Projects projects={projects} photos={photos} onOpen={openPhoto} />}
+        {page === 'notes' && <Notes photos={photos} onOpen={openPhoto} />}
         {page === 'about' && <About />}
         {page === 'contact' && <Contact />}
       </main>
       <Lightbox
         photo={activePhoto}
+        current={activeIndex + 1}
+        total={photos.length}
         onClose={closePhoto}
         onNext={showNext}
         onPrevious={showPrevious}

@@ -1,12 +1,12 @@
 import { useMemo, useState } from 'react';
 
 const frames = [
-  { className: 'frame frame-a', depth: 18 },
-  { className: 'frame frame-b', depth: -12 },
-  { className: 'frame frame-c', depth: 9 },
-  { className: 'frame frame-d', depth: -6 },
-  { className: 'frame frame-e', depth: 14 },
-  { className: 'frame frame-f', depth: -10 },
+  { className: 'frame frame-a', depth: 10 },
+  { className: 'frame frame-b', depth: -7 },
+  { className: 'frame frame-c', depth: 5 },
+  { className: 'frame frame-d', depth: -4 },
+  { className: 'frame frame-e', depth: 8 },
+  { className: 'frame frame-f', depth: -6 },
 ];
 
 function seededShuffle(items) {
@@ -33,7 +33,7 @@ export default function Hero({ photos, onOpen }) {
       onPointerMove={handlePointerMove}
       onPointerLeave={() => setPointer({ x: 0, y: 0 })}
     >
-      <div className="hero-copy" aria-label="BAT 摄影师介绍">
+      <div className="hero-copy" aria-label="BAT 摄影档案介绍">
         <p className="kicker">Photographer / Visual Artist</p>
         <h1>BAT</h1>
         <p className="line">Fragments of light, noise and human existence.</p>
@@ -42,9 +42,6 @@ export default function Hero({ photos, onOpen }) {
       <div className="photo-field" aria-label="精选摄影片段">
         {orderedPhotos.map((photo, index) => {
           const frame = frames[index % frames.length];
-          const x = pointer.x * frame.depth;
-          const y = pointer.y * frame.depth;
-
           return (
             <button
               className={frame.className}
@@ -52,8 +49,8 @@ export default function Hero({ photos, onOpen }) {
               type="button"
               onClick={() => onOpen(photo)}
               style={{
-                '--shift-x': `${x}px`,
-                '--shift-y': `${y}px`,
+                '--shift-x': `${pointer.x * frame.depth}px`,
+                '--shift-y': `${pointer.y * frame.depth}px`,
               }}
               aria-label={`打开作品 ${photo.title}`}
             >
@@ -71,9 +68,7 @@ export default function Hero({ photos, onOpen }) {
         })}
       </div>
 
-      <a className="scroll-mark" href="#work" aria-label="打开作品档案">
-        作品档案
-      </a>
+      <a className="scroll-mark" href="#archive">作品档案</a>
     </section>
   );
 }
