@@ -5,7 +5,7 @@ const photoPath = (fileName) => `${import.meta.env.BASE_URL}photos/${fileName}`;
 export const photos = [
   {
     id: 'bat-01',
-    title: 'bat01鏡子',
+    title: 'bat01',
     year: '2026',
     location: '南宁',
     method: '数字摄影 / 个人档案',
@@ -16,7 +16,7 @@ export const photos = [
   },
   {
     id: 'bat-02',
-    title: 'bat02延長',
+    title: 'bat02',
     year: '2026',
     location: '南宁',
     method: '数字摄影 / 个人档案',
@@ -27,7 +27,7 @@ export const photos = [
   },
   {
     id: 'bat-03',
-    title: 'bat03碰撞',
+    title: 'bat03',
     year: '2026',
     location: '南宁',
     method: '数字摄影 / 个人档案',
@@ -60,7 +60,7 @@ export const photos = [
   },
   {
     id: 'bat-06',
-    title: 'bat06經過',
+    title: 'bat06',
     year: '2026',
     location: '南宁',
     method: '数字摄影 / 个人档案',
