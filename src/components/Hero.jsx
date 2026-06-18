@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 
 const directory = [
   ['档案', 'archive'],
@@ -8,6 +8,11 @@ const directory = [
   ['联系', 'contact'],
 ];
 
+function pickDifferentPhoto(photos, currentId) {
+  const availablePhotos = photos.filter((photo) => photo.id !== currentId);
+  return availablePhotos[Math.floor(Math.random() * availablePhotos.length)] || photos[0];
+}
+
 export default function Hero({ photos, onOpen }) {
   const homeBackground = `${import.meta.env.BASE_URL}photos/home-bg.jpg`;
   const [randomPhoto, setRandomPhoto] = useState(
@@ -15,14 +20,41 @@ export default function Hero({ photos, onOpen }) {
   );
   const [previousRandomPhoto, setPreviousRandomPhoto] = useState(null);
   const [randomFrameVersion, setRandomFrameVersion] = useState(0);
+  const preparedRandomPhoto = useRef(null);
   const sequencePhotos = [photos[1], photos[11], photos[12]].filter(Boolean);
 
+  useEffect(() => {
+    const nextPhoto = pickDifferentPhoto(photos, randomPhoto?.id);
+    if (!nextPhoto) return undefined;
+
+    let cancelled = false;
+    const preloadImage = new Image();
+    preloadImage.src = nextPhoto.src;
+
+    const prepare = preloadImage.decode
+      ? preloadImage.decode().catch(() => undefined)
+      : new Promise((resolve) => {
+          preloadImage.onload = resolve;
+          preloadImage.onerror = resolve;
+        });
+
+    prepare.then(() => {
+      if (!cancelled) preparedRandomPhoto.current = nextPhoto;
+    });
+
+    return () => {
+      cancelled = true;
+    };
+  }, [photos, randomPhoto]);
+
   const changeRandomPhoto = () => {
-    const availablePhotos = photos.filter((photo) => photo.id !== randomPhoto?.id);
-    const nextPhoto = availablePhotos[Math.floor(Math.random() * availablePhotos.length)] || photos[0];
+    if (previousRandomPhoto) return;
+
+    const nextPhoto = preparedRandomPhoto.current || pickDifferentPhoto(photos, randomPhoto?.id);
 
     if (!nextPhoto) return;
 
+    preparedRandomPhoto.current = null;
     setPreviousRandomPhoto(randomPhoto);
     setRandomPhoto(nextPhoto);
     setRandomFrameVersion((version) => version + 1);

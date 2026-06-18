@@ -60,8 +60,9 @@ export default function App() {
 
   return (
     <>
-      <main className={page === 'home' ? 'home-shell' : undefined}>
+      <main className={page === 'home' ? 'home-shell' : 'archive-shell'}>
         <Header page={page} onRandom={openRandom} />
+        {page !== 'home' && <div className="section-background" aria-hidden="true" />}
         {page === 'home' && <Hero photos={photos} onOpen={openPhoto} />}
         {page === 'archive' && <Gallery photos={photos} onOpen={openPhoto} />}
         {page === 'projects' && <Projects projects={projects} photos={photos} onOpen={openPhoto} />}
