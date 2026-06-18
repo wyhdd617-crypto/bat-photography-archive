@@ -60,9 +60,9 @@ export default function App() {
 
   return (
     <>
-      <Header page={page} onRandom={openRandom} />
+      {page !== 'home' && <Header page={page} onRandom={openRandom} />}
       <main>
-        {page === 'home' && <Hero photos={photos.slice(0, 6)} onOpen={openPhoto} />}
+        {page === 'home' && <Hero photos={photos} onOpen={openPhoto} />}
         {page === 'archive' && <Gallery photos={photos} onOpen={openPhoto} />}
         {page === 'projects' && <Projects projects={projects} photos={photos} onOpen={openPhoto} />}
         {page === 'notes' && <Notes photos={photos} onOpen={openPhoto} />}

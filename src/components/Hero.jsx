@@ -1,74 +1,113 @@
-import { useMemo, useState } from 'react';
+import { useState } from 'react';
 
-const frames = [
-  { className: 'frame frame-a', depth: 10 },
-  { className: 'frame frame-b', depth: -7 },
-  { className: 'frame frame-c', depth: 5 },
-  { className: 'frame frame-d', depth: -4 },
-  { className: 'frame frame-e', depth: 8 },
-  { className: 'frame frame-f', depth: -6 },
+const directory = [
+  ['档案', 'archive'],
+  ['项目', 'projects'],
+  ['笔记', 'notes'],
+  ['关于', 'about'],
+  ['联系', 'contact'],
 ];
 
-function seededShuffle(items) {
-  const order = [2, 5, 1, 4, 0, 3];
-  const sorted = [...items].sort((a, b) => a.id.localeCompare(b.id));
-  return order.map((index) => sorted[index]).filter(Boolean);
-}
-
 export default function Hero({ photos, onOpen }) {
-  const [pointer, setPointer] = useState({ x: 0, y: 0 });
-  const orderedPhotos = useMemo(() => seededShuffle(photos), [photos]);
-
-  const handlePointerMove = (event) => {
-    const rect = event.currentTarget.getBoundingClientRect();
-    setPointer({
-      x: (event.clientX - rect.left) / rect.width - 0.5,
-      y: (event.clientY - rect.top) / rect.height - 0.5,
-    });
-  };
+  const [randomPhoto] = useState(
+    () => photos[Math.floor(Math.random() * photos.length)] || photos[0],
+  );
+  const smallPhotos = [photos[3], photos[7], photos[9]].filter(Boolean);
+  const sequencePhotos = [photos[1], photos[11], photos[12]].filter(Boolean);
 
   return (
-    <section
-      className="hero-page"
-      onPointerMove={handlePointerMove}
-      onPointerLeave={() => setPointer({ x: 0, y: 0 })}
-    >
-      <div className="hero-copy" aria-label="BAT 摄影档案介绍">
-        <p className="kicker">Photographer / Visual Artist</p>
-        <h1>BAT</h1>
-        <p className="line">Fragments of light, noise and human existence.</p>
-      </div>
+    <div className="archive-home">
+      <section className="archive-cover" aria-label="BAT 摄影档案首页">
+        <aside className="home-left">
+          <div className="home-identity">
+            <h1>Umbravol</h1>
+            <p className="home-edition">Photography Archive</p>
+            <p className="home-manifesto">记录那些正在消失的。</p>
+          </div>
+          <a className="home-scroll" href="#home-sequence">SCROLL <span>↓</span></a>
+        </aside>
 
-      <div className="photo-field" aria-label="精选摄影片段">
-        {orderedPhotos.map((photo, index) => {
-          const frame = frames[index % frames.length];
-          return (
-            <button
-              className={frame.className}
-              key={photo.id}
-              type="button"
-              onClick={() => onOpen(photo)}
-              style={{
-                '--shift-x': `${pointer.x * frame.depth}px`,
-                '--shift-y': `${pointer.y * frame.depth}px`,
-              }}
-              aria-label={`打开作品 ${photo.title}`}
-            >
-              <img
-                src={photo.src}
-                alt={photo.title}
-                width={photo.width}
-                height={photo.height}
-                loading={index === 0 ? 'eager' : 'lazy'}
-                decoding="async"
-                fetchPriority={index === 0 ? 'high' : 'auto'}
-              />
-            </button>
-          );
-        })}
-      </div>
+        <div className="home-main">
+          <button className="home-main-image" type="button" onClick={() => onOpen(photos[2])}>
+            <img
+              src={photos[2].src}
+              alt={photos[2].title}
+              width={photos[2].width}
+              height={photos[2].height}
+              fetchPriority="high"
+            />
+          </button>
+        </div>
 
-      <a className="scroll-mark" href="#archive">作品档案</a>
-    </section>
+        <aside className="home-right">
+          <nav className="issue-index" aria-label="档案目录">
+            {directory.map(([label, target]) => (
+              <a href={`#${target}`} key={target}>
+                <strong>{label}</strong>
+              </a>
+            ))}
+          </nav>
+
+          <button className="random-proof" type="button" onClick={() => onOpen(randomPhoto)}>
+            <span>Random Frame →</span>
+            <img
+              src={randomPhoto.src}
+              alt={`随机照片 ${randomPhoto.title}`}
+              width={randomPhoto.width}
+              height={randomPhoto.height}
+            />
+            <small>{randomPhoto.archiveNo}</small>
+          </button>
+
+          <div className="home-thumbs" aria-label="档案样片">
+            {smallPhotos.map((photo, index) => (
+              <button type="button" key={photo.id} onClick={() => onOpen(photo)}>
+                <img src={photo.src} alt={photo.title} width={photo.width} height={photo.height} />
+                <span>{String(index + 1).padStart(2, '0')}</span>
+              </button>
+            ))}
+          </div>
+        </aside>
+      </section>
+
+      <section className="sequence-heading" id="home-sequence">
+        <span>BAT / VISUAL RECORD</span>
+        <p>不断增长的图像记录。没有结论，只有被留下的片段。</p>
+        <span>2026—</span>
+      </section>
+
+      {sequencePhotos.map((photo, index) => (
+        <section className={`archive-plate archive-plate-${index + 1}`} key={photo.id}>
+          <button className="plate-primary" type="button" onClick={() => onOpen(photo)}>
+            <img
+              src={photo.src}
+              alt={photo.title}
+              width={photo.width}
+              height={photo.height}
+              loading="lazy"
+            />
+          </button>
+          <button
+            className="plate-companion"
+            type="button"
+            onClick={() => onOpen(photos[(index + 5) % photos.length])}
+          >
+            <img
+              src={photos[(index + 5) % photos.length].src}
+              alt={photos[(index + 5) % photos.length].title}
+              width={photos[(index + 5) % photos.length].width}
+              height={photos[(index + 5) % photos.length].height}
+              loading="lazy"
+            />
+          </button>
+          <p><span>{String(index + 1).padStart(2, '0')}</span>{photo.location}, {photo.year}</p>
+        </section>
+      ))}
+
+      <footer className="home-end">
+        <span>END OF ISSUE / 001</span>
+        <a href="#archive">进入完整档案 →</a>
+      </footer>
+    </div>
   );
 }
