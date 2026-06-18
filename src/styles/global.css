@@ -30,6 +30,7 @@ button { padding: 0; border: 0; background: transparent; cursor: pointer; }
 a { text-decoration: none; }
 img { display: block; max-width: 100%; height: auto; background: #111; }
 main { min-height: 100vh; }
+.home-shell { position: relative; }
 
 .site-header {
   position: fixed;
@@ -515,7 +516,7 @@ main { min-height: 100vh; }
 
 @media (max-width: 768px) {
   .site-header.home-nav {
-    position: fixed;
+    position: absolute;
     top: 34svh;
     right: 10px;
     left: auto;
