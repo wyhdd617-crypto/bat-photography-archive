@@ -60,7 +60,7 @@ export default function App() {
 
   return (
     <>
-      {page !== 'home' && <Header page={page} onRandom={openRandom} />}
+      <Header page={page} onRandom={openRandom} />
       <main>
         {page === 'home' && <Hero photos={photos} onOpen={openPhoto} />}
         {page === 'archive' && <Gallery photos={photos} onOpen={openPhoto} />}

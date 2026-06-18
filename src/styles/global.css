@@ -41,6 +41,7 @@ main { min-height: 100vh; }
   padding: 16px var(--pad);
   color: var(--ink);
 }
+.site-header.home-nav { display: none; }
 .brand-mark {
   position: relative;
   display: flex;
@@ -110,18 +111,35 @@ main { min-height: 100vh; }
   background: repeating-linear-gradient(0deg, transparent 0 9px, rgba(255,255,255,.035) 10px);
 }
 .archive-cover {
+  position: relative;
   display: grid;
   min-height: 100svh;
   grid-template-columns: 20% 55% 25%;
   border-bottom: 1px solid var(--line);
+  overflow: hidden;
+  isolation: isolate;
+}
+.home-cover-background {
+  position: absolute;
+  inset: -4px;
+  z-index: -1;
+  width: calc(100% + 8px);
+  height: calc(100% + 8px);
+  object-fit: cover;
+  object-position: center;
+  filter: grayscale(1) contrast(1.48) brightness(.72) blur(1.2px);
+  transform: scale(1.012);
 }
 .home-left {
+  position: relative;
+  z-index: 2;
   display: flex;
   min-width: 0;
   flex-direction: column;
   justify-content: space-between;
   padding: clamp(28px, 3vw, 52px) clamp(18px, 2.2vw, 36px);
   border-right: 1px solid var(--line);
+  background: rgba(0,0,0,.58);
 }
 .home-identity h1 {
   --title-scale: .48;
@@ -141,8 +159,6 @@ main { min-height: 100vh; }
 .home-scroll { color: var(--muted); font-size: 9px; text-transform: uppercase; }
 .home-scroll span { margin-left: 8px; color: var(--accent); }
 .home-main { position: relative; z-index: 1; min-width: 0; height: 100svh; }
-.home-main-image { display: block; width: 100%; height: 100%; overflow: hidden; }
-.home-main-image img { width: 100%; height: 100%; object-fit: cover; filter: contrast(1.23) saturate(.9); animation: home-reveal 900ms ease both; }
 .home-main::after {
   position: absolute;
   top: 0;
@@ -163,6 +179,7 @@ main { min-height: 100vh; }
   padding: clamp(24px, 2.5vw, 42px) clamp(16px, 2vw, 32px);
   border-left: 1px solid var(--line);
   overflow: hidden;
+  background: rgba(0,0,0,.82);
 }
 .issue-index { border-top: 1px solid var(--line-strong); }
 .issue-index a {
@@ -174,28 +191,70 @@ main { min-height: 100vh; }
 }
 .issue-index a strong { font-family: Georgia, "Songti SC", serif; font-weight: 400; }
 .issue-index a:hover { color: var(--muted); }
+.right-frames { width: min(100%, 320px); align-self: center; justify-self: center; }
+.random-frame-heading {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  min-height: 42px;
+  margin-bottom: 10px;
+  color: var(--accent);
+  font-family: "Arial Narrow", "Helvetica Neue", sans-serif;
+  font-size: clamp(24px, 2.1vw, 32px);
+  font-weight: 700;
+  line-height: 1;
+  text-transform: uppercase;
+}
+.randomize-frame {
+  display: grid;
+  width: 42px;
+  height: 42px;
+  flex: 0 0 42px;
+  place-items: center;
+  color: #eaeaea;
+}
+.randomize-frame i { font-size: clamp(28px, 2.2vw, 34px); font-style: normal; font-weight: 300; line-height: 1; }
+.randomize-frame:hover,
+.randomize-frame:focus-visible { color: var(--accent); }
+.randomize-frame:focus-visible { outline: 1px solid rgba(234,234,234,.72); outline-offset: 2px; }
 .random-proof {
   position: relative;
-  z-index: 6;
-  align-self: center;
-  width: min(100%, 260px);
-  margin: 3vh auto 2vh;
-  text-align: left;
-  transform: none;
+  display: block;
+  width: 100%;
+  overflow: hidden;
+  border: 1px solid rgba(234,234,234,.22);
+  background: #000;
 }
-.random-proof > span { display: block; margin-bottom: 9px; color: var(--accent); font-size: 9px; text-transform: uppercase; }
-.random-proof img { width: 100%; height: clamp(110px, 18vh, 190px); object-fit: cover; filter: contrast(1.2) saturate(.9); }
-.random-proof small { display: block; margin-top: 7px; color: var(--dim); font-size: 8px; }
-.home-thumbs { display: grid; grid-template-columns: repeat(12, 1fr); gap: 5px; align-items: end; }
-.home-thumbs button { position: relative; min-width: 0; }
-.home-thumbs button:nth-child(1) { grid-column: 1 / span 4; }
-.home-thumbs button:nth-child(2) { grid-column: 5 / span 4; }
-.home-thumbs button:nth-child(3) { grid-column: 9 / span 4; }
-.home-thumbs img { width: 100%; height: clamp(72px, 13vh, 128px); object-fit: cover; filter: contrast(1.18) saturate(.88); }
-.home-thumbs button:nth-child(1) img { height: clamp(94px, 17vh, 160px); }
-.home-thumbs button:nth-child(2) img { height: clamp(68px, 11vh, 108px); }
-.home-thumbs button:nth-child(3) img { height: clamp(80px, 14vh, 136px); }
-.home-thumbs span { position: absolute; bottom: 3px; left: 4px; color: var(--accent); font-size: 7px; mix-blend-mode: difference; }
+.random-proof-media {
+  position: relative;
+  display: block;
+  width: 100%;
+  height: clamp(190px, 31vh, 320px);
+  overflow: hidden;
+}
+.random-proof img {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  filter: contrast(1.22) saturate(.88);
+}
+.random-image-in { z-index: 2; animation: random-frame-in 520ms cubic-bezier(.22,.7,.18,1) both; }
+.random-image-out { z-index: 1; animation: random-frame-out 520ms cubic-bezier(.4,0,.2,1) both; }
+.random-proof small { position: absolute; right: 4px; bottom: 3px; color: var(--dim); font-size: 7px; }
+.home-signature {
+  align-self: end;
+  justify-self: end;
+  margin: 0;
+  color: rgba(234,234,234,.68);
+  font-family: Georgia, "Times New Roman", serif;
+  font-size: clamp(22px, 1.9vw, 30px);
+  font-style: italic;
+  font-weight: 300;
+  line-height: 1;
+  white-space: nowrap;
+}
 .sequence-heading {
   display: grid;
   min-height: 68svh;
@@ -234,7 +293,6 @@ main { min-height: 100vh; }
   font-size: 9px;
 }
 .home-end a { color: var(--accent); }
-@keyframes home-reveal { from { opacity: 0; } to { opacity: 1; } }
 @supports (animation-timeline: view()) {
   .archive-plate button { animation: plate-reveal linear both; animation-timeline: view(); animation-range: entry 12% cover 34%; }
   @keyframes plate-reveal { from { opacity: 0; } to { opacity: 1; } }
@@ -363,6 +421,14 @@ main { min-height: 100vh; }
 }
 @keyframes grain { 0%{transform:translate(0)} 25%{transform:translate(-1%,1%)} 50%{transform:translate(1%,-1%)} 75%{transform:translate(-1%,-.5%)} 100%{transform:translate(.5%,1%)} }
 @keyframes reveal { from { opacity: 0; } to { opacity: 1; } }
+@keyframes random-frame-in {
+  from { opacity: .42; transform: translate(14px, -9px) rotate(.8deg) scale(1.025); }
+  to { opacity: 1; transform: translate(0) rotate(0) scale(1); }
+}
+@keyframes random-frame-out {
+  from { opacity: 1; transform: translate(0) rotate(0) scale(1); }
+  to { opacity: 0; transform: translate(-11px, 8px) rotate(-.65deg) scale(.985); }
+}
 
 @media (max-width: 760px) {
   .site-header { display: block; padding-top: 12px; padding-bottom: 10px; }
@@ -374,7 +440,7 @@ main { min-height: 100vh; }
   .archive-home::before { opacity: .06; }
   .archive-cover { grid-template-columns: 1fr; grid-template-rows: 100svh auto; }
   .home-main { grid-row: 1; grid-column: 1; width: 100%; height: 100svh; }
-  .home-main-image img { object-position: center; }
+  .home-cover-background { height: calc(100svh + 8px); object-position: center; }
   .home-left {
     z-index: 2;
     grid-row: 1;
@@ -385,6 +451,7 @@ main { min-height: 100vh; }
     border: 0;
     pointer-events: none;
     mix-blend-mode: difference;
+    background: rgba(0,0,0,.16);
   }
   .home-identity h1 { --title-scale: .62; width: 162%; font-size: clamp(84px, 30vw, 126px); }
   .home-edition { margin-top: 11px; }
@@ -397,13 +464,10 @@ main { min-height: 100vh; }
     grid-template-rows: auto auto 1fr;
     padding: 72px 20px 40px;
     border: 0;
+    background: #000;
   }
   .issue-index a { padding: 15px 0 14px; font-size: 15px; }
-  .random-proof { width: 68vw; margin: 14svh 0 11svh auto; transform: none; }
-  .random-proof img { height: 28svh; }
-  .home-thumbs { align-self: end; }
-  .home-thumbs img { height: 13svh; }
-  .home-thumbs button:nth-child(1) img { height: 18svh; }
+  .right-frames { align-self: center; }
   .sequence-heading {
     min-height: 76svh;
     grid-template-columns: 1fr;
@@ -449,6 +513,64 @@ main { min-height: 100vh; }
   .lightbox-prev, .lightbox-next { top: auto; bottom: 8px; }
 }
 
+@media (max-width: 768px) {
+  .site-header.home-nav {
+    position: fixed;
+    top: 34svh;
+    right: 10px;
+    left: auto;
+    z-index: 80;
+    display: block;
+    width: 118px;
+    padding: 0;
+    background: transparent;
+  }
+  .home-nav .brand-mark { display: none; }
+  .site-header.home-nav nav {
+    display: flex;
+    width: 100%;
+    flex-direction: column;
+    gap: 0;
+    padding: 0;
+    overflow: visible;
+    border: 1px solid rgba(234,234,234,.34);
+    background: rgba(0,0,0,.82);
+  }
+  .site-header.home-nav nav a,
+  .site-header.home-nav nav button {
+    display: grid;
+    width: 100%;
+    min-height: 40px;
+    grid-template-columns: 24px minmax(0,1fr);
+    gap: 4px;
+    align-items: center;
+    padding: 0 9px;
+    border: 0;
+    border-bottom: 1px solid rgba(234,234,234,.16);
+    color: #eaeaea;
+    font-size: 11px;
+    line-height: 1.2;
+    text-align: left;
+  }
+  .site-header.home-nav nav button:last-child { border-bottom: 0; }
+  .site-header.home-nav nav a::before,
+  .site-header.home-nav nav button::before {
+    position: static;
+    width: auto;
+    height: auto;
+    content: attr(data-index);
+    background: none;
+    color: var(--accent);
+    font-family: "Arial Narrow", "Helvetica Neue", sans-serif;
+    font-size: 8px;
+    font-weight: 700;
+  }
+  .site-header.home-nav nav a:active,
+  .site-header.home-nav nav button:active { color: var(--accent); }
+  .archive-cover .issue-index { display: none; }
+  .archive-cover .home-right { grid-template-rows: minmax(0,1fr) auto; }
+}
+
 @media (max-width: 480px) and (orientation: portrait) {
   :root { --pad: 16px; }
   .site-header { padding-right: 12px; padding-left: 12px; }
@@ -458,12 +580,9 @@ main { min-height: 100vh; }
   .home-identity h1 { --title-scale: .61; width: 164%; font-size: clamp(82px, 29vw, 116px); }
   .home-edition { margin-top: 14px; font-size: 9px; }
   .home-manifesto { max-width: 176px; font-size: 16px; }
-  .home-main-image img { object-position: 52% center; }
+  .home-cover-background { object-position: center; }
   .home-right { min-height: 100dvh; padding: 64px 16px 32px; }
   .issue-index a { min-height: 48px; align-items: center; }
-  .random-proof { width: 76vw; margin-top: 12svh; margin-bottom: 10svh; }
-  .random-proof img { height: 26svh; }
-  .home-thumbs { gap: 8px; }
   .sequence-heading { padding-right: 16px; padding-left: 16px; }
   .archive-plate p { max-width: 54vw; line-height: 1.5; }
   .home-end { gap: 24px; }

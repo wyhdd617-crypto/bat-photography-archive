@@ -9,35 +9,46 @@ const directory = [
 ];
 
 export default function Hero({ photos, onOpen }) {
-  const [randomPhoto] = useState(
+  const homeBackground = `${import.meta.env.BASE_URL}photos/home-bg.jpg`;
+  const [randomPhoto, setRandomPhoto] = useState(
     () => photos[Math.floor(Math.random() * photos.length)] || photos[0],
   );
-  const smallPhotos = [photos[3], photos[7], photos[9]].filter(Boolean);
+  const [previousRandomPhoto, setPreviousRandomPhoto] = useState(null);
+  const [randomFrameVersion, setRandomFrameVersion] = useState(0);
   const sequencePhotos = [photos[1], photos[11], photos[12]].filter(Boolean);
+
+  const changeRandomPhoto = () => {
+    const availablePhotos = photos.filter((photo) => photo.id !== randomPhoto?.id);
+    const nextPhoto = availablePhotos[Math.floor(Math.random() * availablePhotos.length)] || photos[0];
+
+    if (!nextPhoto) return;
+
+    setPreviousRandomPhoto(randomPhoto);
+    setRandomPhoto(nextPhoto);
+    setRandomFrameVersion((version) => version + 1);
+  };
 
   return (
     <div className="archive-home">
       <section className="archive-cover" aria-label="BAT 摄影档案首页">
+        <img
+          className="home-cover-background"
+          src={homeBackground}
+          alt="Umbravol 首页背景影像"
+          width="877"
+          height="529"
+          fetchPriority="high"
+        />
         <aside className="home-left">
           <div className="home-identity">
             <h1>Umbravol</h1>
             <p className="home-edition">Photography Archive</p>
-            <p className="home-manifesto">记录那些正在消失的。</p>
+            <p className="home-manifesto">记录那些正在消失的欲望，焦虑，悲伤。</p>
           </div>
           <a className="home-scroll" href="#home-sequence">SCROLL <span>↓</span></a>
         </aside>
 
-        <div className="home-main">
-          <button className="home-main-image" type="button" onClick={() => onOpen(photos[2])}>
-            <img
-              src={photos[2].src}
-              alt={photos[2].title}
-              width={photos[2].width}
-              height={photos[2].height}
-              fetchPriority="high"
-            />
-          </button>
-        </div>
+        <div className="home-main" aria-hidden="true" />
 
         <aside className="home-right">
           <nav className="issue-index" aria-label="档案目录">
@@ -48,25 +59,45 @@ export default function Hero({ photos, onOpen }) {
             ))}
           </nav>
 
-          <button className="random-proof" type="button" onClick={() => onOpen(randomPhoto)}>
-            <span>Random Frame →</span>
-            <img
-              src={randomPhoto.src}
-              alt={`随机照片 ${randomPhoto.title}`}
-              width={randomPhoto.width}
-              height={randomPhoto.height}
-            />
-            <small>{randomPhoto.archiveNo}</small>
-          </button>
-
-          <div className="home-thumbs" aria-label="档案样片">
-            {smallPhotos.map((photo, index) => (
-              <button type="button" key={photo.id} onClick={() => onOpen(photo)}>
-                <img src={photo.src} alt={photo.title} width={photo.width} height={photo.height} />
-                <span>{String(index + 1).padStart(2, '0')}</span>
+          <div className="right-frames">
+            <div className="random-frame-heading">
+              <span>Random Frame</span>
+              <button
+                className="randomize-frame"
+                type="button"
+                onClick={changeRandomPhoto}
+                aria-label="Change random photo"
+                title="Change random photo"
+              >
+                <i aria-hidden="true">⇄</i>
               </button>
-            ))}
+            </div>
+            <button className="random-proof" type="button" onClick={() => onOpen(randomPhoto)}>
+              <span className="random-proof-media">
+                {previousRandomPhoto && (
+                  <img
+                    className="random-image random-image-out"
+                    src={previousRandomPhoto.src}
+                    alt=""
+                    width={previousRandomPhoto.width}
+                    height={previousRandomPhoto.height}
+                    aria-hidden="true"
+                  />
+                )}
+                <img
+                  key={randomFrameVersion}
+                  className="random-image random-image-in"
+                  src={randomPhoto.src}
+                  alt={`随机照片 ${randomPhoto.title}`}
+                  width={randomPhoto.width}
+                  height={randomPhoto.height}
+                  onAnimationEnd={() => setPreviousRandomPhoto(null)}
+                />
+              </span>
+              <small>{randomPhoto.archiveNo}</small>
+            </button>
           </div>
+          <p className="home-signature">are_bure-boke</p>
         </aside>
       </section>
 
