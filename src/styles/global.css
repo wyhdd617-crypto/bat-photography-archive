@@ -552,6 +552,7 @@ main { min-height: 100vh; }
     mix-blend-mode: normal;
     background: rgba(0,0,0,.16);
   }
+  .home-identity { width: calc(100% - 140px); }
   .home-identity h1 {
     --title-scale: .62;
     width: 162%;
