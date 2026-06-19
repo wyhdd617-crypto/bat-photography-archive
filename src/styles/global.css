@@ -704,7 +704,11 @@ main { min-height: 100vh; }
   .site-header nav a,
   .site-header nav button { min-height: 42px; padding-right: 14px; padding-left: 14px; }
   .home-left { padding: 22px 16px 24px; }
-  .home-identity h1 { --title-scale: .61; width: 164%; font-size: clamp(82px, 29vw, 116px); }
+  .home-identity h1 {
+    --title-scale: .52;
+    width: 192%;
+    font-size: clamp(72px, 24vw, 96px);
+  }
   .home-edition { margin-top: 14px; font-size: 9px; }
   .home-manifesto { max-width: 176px; font-size: 16px; }
   .home-cover-background { object-position: center; }
