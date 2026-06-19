@@ -1,9 +1,9 @@
 const directory = [
   ['档案', 'archive'],
   ['项目', 'projects'],
-  ['笔记', 'notes'],
   ['关于', 'about'],
   ['联系', 'contact'],
+  ['蝙蝠小脑袋在想什么？', 'thoughts'],
 ];
 
 export default function Hero({ photos, onOpen }) {

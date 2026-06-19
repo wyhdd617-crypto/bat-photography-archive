@@ -1,6 +1,6 @@
-# BAT 摄影档案
+# BAT 摄影与私人文本档案
 
-BAT 是一个使用 React + Vite 构建的私人视觉档案。它以摄影书和地下摄影杂志的阅读方式组织照片，而不是按商业作品集的分类方式展示。
+BAT 使用 React + Vite 构建，照片是视觉档案，`蝙蝠小脑袋在想什么？` 是由 Decap CMS 管理的私人文本页。
 
 ## 本地运行
 
@@ -9,36 +9,68 @@ npm install
 npm run dev
 ```
 
-浏览器打开终端显示的地址，通常是 `http://localhost:5173`。
+打开终端显示的地址，通常是 `http://localhost:5173`。
 
-## 档案结构
+## 私人诗歌系统如何工作
 
-- `档案`：按照片进入档案的顺序浏览全部图像。
-- `项目`：把照片编辑为持续生长的图像序列。
-- `笔记`：记录时间、地点、旁注和拍摄背景。
-- `随机一帧`：随机进入一张照片，模拟翻开摄影书的一页。
-- 图片查看器：支持全屏浏览、键盘左右方向键切换，按 `Esc` 关闭。
+- 后台地址：`https://你的网站域名/admin/`
+- 内容目录：`src/content/thoughts/`
+- 后台发布后，Decap CMS 会把文章作为 JSON 文件提交到 GitHub。
+- Netlify 检测到 GitHub 更新后重新构建网站。
+- 前台在构建时读取全部文章，并按日期倒序显示。
+- 正文使用纯文本保存，换行、空行和段首空格会原样保留。
+- 网站没有评论、注册或投稿功能。
 
-## 添加照片
+## 第一次启用后台
 
-1. 把压缩后的网页图片放入 `public/photos/`。
-2. 在 `src/data/photos.js` 的 `basePhotos` 中添加文件名和尺寸。
-3. 在生成的照片数据中补充真实的时间、地点、旁注和拍摄背景。
-4. 如需加入项目，在同一文件的 `projects` 中填写照片 ID。
+这些设置只需做一次：
 
-建议保留一份高分辨率原片用于印刷，网页版本单张尽量控制在 300KB 到 1.5MB，以改善手机加载速度。
+1. 确保 Netlify 站点连接到本项目的 GitHub 仓库。
+2. 进入 Netlify 中该站点的设置，启用 **Identity**。
+3. 把 Identity 的注册方式设为 **Invite only / 仅邀请**。不要开放公开注册。
+4. 在 Identity 的服务设置中启用 **Git Gateway**。
+5. 在 Identity 用户页面选择 **Invite users**，只邀请你自己的邮箱。
+6. 打开邀请邮件并完成密码设置。
+7. 访问 `https://你的网站域名/admin/`，使用该邮箱登录。
 
-## 构建和更新 Netlify
+任何人都可以看到 `/admin/` 的登录页面，但只有被邀请的账号拥有登录和写入仓库的权限。
+
+## 发布第一首诗
+
+1. 登录 `/admin/`。
+2. 打开 `蝙蝠小脑袋在想什么？`。
+3. 点击 `新建一页私人文本`。
+4. 填写标题、日期和类型。
+5. 标签可以留空，也可以填写多个。
+6. 在正文框中直接输入诗歌。需要空行时按两次回车，段首空格可以直接输入。
+7. 点击 `发布`。
+8. 等待 Netlify 自动部署完成，前台 `#thoughts` 页面会出现新内容。
+
+## 部署或更新到 Netlify
+
+先确认构建通过：
 
 ```bash
 npm run build
 ```
 
-构建结果会生成在 `dist/`。如果使用 Netlify 手动部署，把新的 `dist` 文件夹重新拖入该站点的 Deploys 页面即可更新。
+然后提交并推送源代码：
+
+```bash
+git add .
+git commit -m "add private writing archive"
+git push origin main
+```
+
+如果 Netlify 已连接该 GitHub 仓库，推送后会自动运行 `npm run build`，并发布 `dist/`。CMS 必须使用 GitHub 自动部署；只手动拖入 `dist/` 无法让后台把新文章持续写回源代码。
 
 ## 主要文件
 
-- `src/data/photos.js`：照片资料、旁注和项目序列。
-- `src/styles/global.css`：全站排版、黑白影调和移动端布局。
-- `src/components/`：档案、项目、笔记、声明和图片查看器。
-- `public/photos/`：网页使用的摄影图片。
+- `public/admin/index.html`：Decap CMS 后台入口。
+- `public/admin/config.yml`：后台字段、权限后端和内容目录配置。
+- `src/content/thoughts/`：每一篇私人文本的源文件。
+- `src/data/thoughts.js`：读取并按日期排序内容。
+- `src/components/Thoughts.jsx`：私人诗集前台页面。
+- `src/data/photos.js`：照片资料和项目序列。
+- `src/styles/global.css`：全站视觉与响应式样式。
+- `netlify.toml`：Netlify 构建配置。

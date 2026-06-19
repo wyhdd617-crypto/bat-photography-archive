@@ -1,0 +1,59 @@
+backend:
+  name: git-gateway
+  branch: main
+
+locale: zh_Hans
+publish_mode: simple
+local_backend: true
+
+media_folder: public/uploads
+public_folder: /uploads
+
+collections:
+  - name: thoughts
+    label: 蝙蝠小脑袋在想什么？
+    label_singular: 一页私人文本
+    folder: src/content/thoughts
+    create: true
+    delete: true
+    format: json
+    extension: json
+    slug: "{{year}}-{{month}}-{{day}}-{{slug}}"
+    summary: "{{date}} · {{title}}"
+    sortable_fields: [date, title, type]
+    view_filters:
+      - label: 现代诗
+        field: type
+        pattern: 现代诗
+      - label: 梦境
+        field: type
+        pattern: 梦境
+      - label: 呓语
+        field: type
+        pattern: 呓语
+      - label: 放大
+        field: type
+        pattern: 放大
+    fields:
+      - label: 标题
+        name: title
+        widget: string
+      - label: 日期
+        name: date
+        widget: datetime
+        date_format: YYYY-MM-DD
+        time_format: false
+        format: YYYY-MM-DD
+      - label: 类型
+        name: type
+        widget: select
+        options: [现代诗, 梦境, 呓语, 放大]
+      - label: 标签
+        name: tags
+        widget: list
+        required: false
+        default: []
+      - label: 正文
+        name: body
+        widget: text
+        hint: 换行、空行和段首空格都会按原样保留。

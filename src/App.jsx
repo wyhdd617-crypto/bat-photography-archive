@@ -1,19 +1,21 @@
 import { useCallback, useEffect, useMemo, useState } from 'react';
 import { photos, projects } from './data/photos.js';
+import { thoughts } from './data/thoughts.js';
 import Header from './components/Header.jsx';
 import Hero from './components/Hero.jsx';
 import Gallery from './components/Gallery.jsx';
 import Projects from './components/Projects.jsx';
-import Notes from './components/Notes.jsx';
+import Thoughts from './components/Thoughts.jsx';
 import About from './components/About.jsx';
 import Contact from './components/Contact.jsx';
 import Lightbox from './components/Lightbox.jsx';
 import FilmNoise from './components/FilmNoise.jsx';
 
-const pageOrder = ['home', 'archive', 'projects', 'notes', 'about', 'contact'];
+const pageOrder = ['home', 'archive', 'projects', 'about', 'thoughts', 'contact'];
 
 function readHash() {
   const clean = window.location.hash.replace('#', '');
+  if (clean === 'notes') return 'thoughts';
   return pageOrder.includes(clean) ? clean : 'home';
 }
 
@@ -51,22 +53,17 @@ export default function App() {
       return photos[(index - 1 + photos.length) % photos.length].id;
     });
   }, []);
-  const openRandom = useCallback(() => {
-    const candidates = photos.filter((photo) => photo.id !== activePhotoId);
-    openPhoto(candidates[Math.floor(Math.random() * candidates.length)] || photos[0]);
-  }, [activePhotoId, openPhoto]);
-
   const activePhoto = activeIndex >= 0 ? photos[activeIndex] : null;
 
   return (
     <>
       <main className={page === 'home' ? 'home-shell' : 'archive-shell'}>
-        <Header page={page} onRandom={openRandom} />
+        <Header page={page} />
         {page !== 'home' && <div className="section-background" aria-hidden="true" />}
         {page === 'home' && <Hero photos={photos} onOpen={openPhoto} />}
         {page === 'archive' && <Gallery photos={photos} onOpen={openPhoto} />}
         {page === 'projects' && <Projects projects={projects} photos={photos} onOpen={openPhoto} />}
-        {page === 'notes' && <Notes photos={photos} onOpen={openPhoto} />}
+        {page === 'thoughts' && <Thoughts thoughts={thoughts} />}
         {page === 'about' && <About />}
         {page === 'contact' && <Contact />}
       </main>
