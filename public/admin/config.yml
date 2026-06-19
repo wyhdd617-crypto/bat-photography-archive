@@ -1,10 +1,12 @@
 backend:
   name: git-gateway
   branch: main
+  squash_merges: true
 
 locale: zh_Hans
 publish_mode: simple
-local_backend: true
+site_url: https://batarchive.netlify.app
+display_url: https://batarchive.netlify.app
 
 media_folder: public/uploads
 public_folder: /uploads
@@ -34,6 +36,9 @@ collections:
       - label: 放大
         field: type
         pattern: 放大
+      - label: 摄影随笔
+        field: type
+        pattern: 摄影随笔
     fields:
       - label: 标题
         name: title
@@ -47,7 +52,7 @@ collections:
       - label: 类型
         name: type
         widget: select
-        options: [现代诗, 梦境, 呓语, 放大]
+        options: [现代诗, 梦境, 呓语, 放大, 摄影随笔]
       - label: 标签
         name: tags
         widget: list

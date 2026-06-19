@@ -33,6 +33,8 @@ npm run dev
 6. 打开邀请邮件并完成密码设置。
 7. 访问 `https://你的网站域名/admin/`，使用该邮箱登录。
 
+Git Gateway 已被 Netlify 标记为弃用，但仍是 Decap CMS 使用 Netlify Identity 登录时所需的兼容后端。BAT 后台会先检查 `/.netlify/git/settings`；如果它返回 `404`，说明 Git Gateway 尚未在 Netlify 项目中启用，而不是 `config.yml` 语法错误。
+
 任何人都可以看到 `/admin/` 的登录页面，但只有被邀请的账号拥有登录和写入仓库的权限。
 
 ## 发布第一首诗

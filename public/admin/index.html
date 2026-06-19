@@ -5,9 +5,41 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <meta name="robots" content="noindex, nofollow" />
     <title>BAT / Private Editor</title>
+    <style>
+      html { color-scheme: dark; background: #050505; }
+      body { margin: 0; background: #050505; color: #d9d5cc; font: 14px/1.7 Georgia, "Songti SC", serif; }
+      #cms-status { max-width: 620px; margin: 18vh auto 0; padding: 24px; border-top: 1px solid #6f141c; border-bottom: 1px solid #333; }
+      #cms-status strong { display: block; margin-bottom: 12px; color: #a93640; font-size: 18px; }
+      #cms-status code { color: #eee; }
+      #cms-status[hidden] { display: none; }
+    </style>
   </head>
   <body>
+    <div id="cms-status">正在检查 BAT 私人后台...</div>
     <script src="https://identity.netlify.com/v1/netlify-identity-widget.js"></script>
-    <script src="https://unpkg.com/decap-cms@^3.0.0/dist/decap-cms.js"></script>
+    <script>
+      async function startCms() {
+        const status = document.getElementById('cms-status');
+
+        try {
+          const response = await fetch('/.netlify/git/settings', { cache: 'no-store' });
+          // Git Gateway returns 401 before Identity supplies a login token.
+          if (response.status === 404) throw new Error(String(response.status));
+
+          status.hidden = true;
+          const cmsScript = document.createElement('script');
+          cmsScript.src = 'https://unpkg.com/decap-cms@3.14.1/dist/decap-cms.js';
+          document.body.appendChild(cmsScript);
+        } catch (error) {
+          status.innerHTML = `
+            <strong>Git Gateway 尚未启用</strong>
+            <p>当前站点的 <code>/.netlify/git/settings</code> 返回 ${error.message || '错误'}。</p>
+            <p>请在 Netlify 打开：Project configuration → Identity → Services → Git Gateway，然后选择 Enable Git Gateway。启用后刷新本页。</p>
+          `;
+        }
+      }
+
+      startCms();
+    </script>
   </body>
 </html>

@@ -1,4 +1,4 @@
-const sections = ['现代诗', '梦境', '呓语', '放大'];
+const sections = ['现代诗', '梦境', '呓语', '放大', '摄影随笔'];
 
 function formatDate(date) {
   if (!date) return '日期未记';
