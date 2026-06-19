@@ -1,5 +1,3 @@
-import { useEffect, useRef, useState } from 'react';
-
 const directory = [
   ['档案', 'archive'],
   ['项目', 'projects'],
@@ -8,57 +6,9 @@ const directory = [
   ['联系', 'contact'],
 ];
 
-function pickDifferentPhoto(photos, currentId) {
-  const availablePhotos = photos.filter((photo) => photo.id !== currentId);
-  return availablePhotos[Math.floor(Math.random() * availablePhotos.length)] || photos[0];
-}
-
 export default function Hero({ photos, onOpen }) {
   const homeBackground = `${import.meta.env.BASE_URL}photos/home-bg.jpg`;
-  const [randomPhoto, setRandomPhoto] = useState(
-    () => photos[Math.floor(Math.random() * photos.length)] || photos[0],
-  );
-  const [previousRandomPhoto, setPreviousRandomPhoto] = useState(null);
-  const [randomFrameVersion, setRandomFrameVersion] = useState(0);
-  const preparedRandomPhoto = useRef(null);
   const sequencePhotos = [photos[1], photos[11], photos[12]].filter(Boolean);
-
-  useEffect(() => {
-    const nextPhoto = pickDifferentPhoto(photos, randomPhoto?.id);
-    if (!nextPhoto) return undefined;
-
-    let cancelled = false;
-    const preloadImage = new Image();
-    preloadImage.src = nextPhoto.src;
-
-    const prepare = preloadImage.decode
-      ? preloadImage.decode().catch(() => undefined)
-      : new Promise((resolve) => {
-          preloadImage.onload = resolve;
-          preloadImage.onerror = resolve;
-        });
-
-    prepare.then(() => {
-      if (!cancelled) preparedRandomPhoto.current = nextPhoto;
-    });
-
-    return () => {
-      cancelled = true;
-    };
-  }, [photos, randomPhoto]);
-
-  const changeRandomPhoto = () => {
-    if (previousRandomPhoto) return;
-
-    const nextPhoto = preparedRandomPhoto.current || pickDifferentPhoto(photos, randomPhoto?.id);
-
-    if (!nextPhoto) return;
-
-    preparedRandomPhoto.current = null;
-    setPreviousRandomPhoto(randomPhoto);
-    setRandomPhoto(nextPhoto);
-    setRandomFrameVersion((version) => version + 1);
-  };
 
   return (
     <div className="archive-home">
@@ -91,44 +41,6 @@ export default function Hero({ photos, onOpen }) {
             ))}
           </nav>
 
-          <div className="right-frames">
-            <div className="random-frame-heading">
-              <span>Random Frame</span>
-              <button
-                className="randomize-frame"
-                type="button"
-                onClick={changeRandomPhoto}
-                aria-label="Change random photo"
-                title="Change random photo"
-              >
-                <i aria-hidden="true">⇄</i>
-              </button>
-            </div>
-            <button className="random-proof" type="button" onClick={() => onOpen(randomPhoto)}>
-              <span className="random-proof-media">
-                {previousRandomPhoto && (
-                  <img
-                    className="random-image random-image-out"
-                    src={previousRandomPhoto.src}
-                    alt=""
-                    width={previousRandomPhoto.width}
-                    height={previousRandomPhoto.height}
-                    aria-hidden="true"
-                  />
-                )}
-                <img
-                  key={randomFrameVersion}
-                  className="random-image random-image-in"
-                  src={randomPhoto.src}
-                  alt={`随机照片 ${randomPhoto.title}`}
-                  width={randomPhoto.width}
-                  height={randomPhoto.height}
-                  onAnimationEnd={() => setPreviousRandomPhoto(null)}
-                />
-              </span>
-              <small>{randomPhoto.archiveNo}</small>
-            </button>
-          </div>
           <p className="home-signature">are_bure-boke</p>
         </aside>
       </section>
