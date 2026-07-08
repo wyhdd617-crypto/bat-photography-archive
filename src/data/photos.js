@@ -25,6 +25,12 @@ const basePhotos = [
   ['bat-22', 'bat22', 'bat-22.jpg', 6000, 4000],
   ['bat-23', 'bat23', 'bat-23.jpg', 6000, 4000],
   ['bat-24', 'bat24', 'bat-24.jpg', 6000, 4000],
+  ['bat-25', 'bat25', 'bat-25.jpg', 4096, 2730],
+  ['bat-26', 'bat26', 'bat-26.jpg', 6000, 4000],
+  ['bat-27', 'bat27', 'bat-27.jpg', 6000, 4059],
+  ['bat-28', 'bat28', 'bat-28.jpg', 6000, 4000],
+  ['bat-29', 'bat29', 'bat-29.jpg', 6000, 4000],
+  ['bat-30', 'bat30', 'bat-30.jpg', 6000, 4000],
 ];
 
 const seasidePhotoIds = new Set([
@@ -38,6 +44,12 @@ const seasidePhotoIds = new Set([
   'bat-22',
   'bat-23',
   'bat-24',
+  'bat-25',
+  'bat-26',
+  'bat-27',
+  'bat-28',
+  'bat-29',
+  'bat-30',
 ]);
 
 export const photos = basePhotos.map(([id, title, file, width, height], index) => {
@@ -98,6 +110,6 @@ export const projects = [
     title: '海边纪实',
     years: '2026—',
     description: '海水、岸线、人群与偶然遮挡构成的连续现场。',
-    photoIds: ['bat-15', 'bat-16', 'bat-17', 'bat-18', 'bat-19', 'bat-20', 'bat-21', 'bat-22', 'bat-23', 'bat-24'],
+    photoIds: ['bat-15', 'bat-16', 'bat-17', 'bat-18', 'bat-19', 'bat-20', 'bat-21', 'bat-22', 'bat-23', 'bat-24', 'bat-25', 'bat-26', 'bat-27', 'bat-28', 'bat-29', 'bat-30'],
   },
 ];
